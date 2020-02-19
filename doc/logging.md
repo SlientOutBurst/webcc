@@ -59,7 +59,7 @@ Each field is well aligned and formatted to achieve a beautiful display. See the
 
 ### Example: Server Side
 
-The following logs are from [rest_book_server](../examples/book_server) example.
+The following logs are from [book_server](../examples/book_server) example.
 
 ```csv
 2019-07-11 15:25:35.620, INFO,    main,            server.cc,   60, Server is going to run...
@@ -161,7 +161,7 @@ As you can see, the HTTP requests and responses are logged at level `VERB`, and 
 
 ### Example: Client Side
 
-The following logs are from [rest_book_client](../examples/book_client) example.
+The following logs are from [book_client](../examples/book_client) example.
 
 ```csv
 2019-07-11 15:25:53.052, VERB,    main,            client.cc,   80, Resize buffer: 0 -> 1024.
