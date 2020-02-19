@@ -35,7 +35,7 @@ Automation test based on real servers (mostly [httpbin.org](http://httpbin.org/)
 ### `WEBCC_ENABLE_LOG` and `WEBCC_LOG_LEVEL`
 
 These two options define how logging behaves.
-See [doc/Logging](https://github.com/sprinfall/webcc/doc/logging.md) for more details.
+See [Logging](logging.md) for more details.
 
 ### `WEBCC_ENABLE_SSL`
 
@@ -47,6 +47,6 @@ For GZIP compression support (need Zlib).
 
 ## Platforms
 
-- [Build on Windows](https://github.com/sprinfall/webcc/doc/build_on_windows.md)
-- [Build on Linux](https://github.com/sprinfall/webcc/doc/build_on_linux.md)
-- [Build on Mac](https://github.com/sprinfall/webcc/doc/build_on_mac.md)
+- [Build on Windows](build_on_windows.md)
+- [Build on Linux](build_on_linux.md)
+- [Build on Mac](build_on_mac.md)
