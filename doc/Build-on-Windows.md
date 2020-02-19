@@ -8,7 +8,7 @@ Download the .7z or .zip from [here](https://www.boost.org/users/download/#live)
 
 Open `VS Native Tools Command Prompt` from Windows start menu.
 
-![VS Cmd Prompts Win7](https://github.com/sprinfall/webcc/blob/master/doc/screenshots/vs_cmd_prompts_win7.png)
+![VS Cmd Prompts Win7](screenshots/vs_cmd_prompts_win7.png)
 
 E.g., I choose `VS2015 x64 Native Tools Command Prompt` to build a 64-bit Boost.
 
@@ -35,7 +35,7 @@ The following installers are recommended for development:
 
 During the installation, you will be asked to copy OpenSSL DLLs (`libcrypto-1_1-x64.dll` and `libssl-1_1-x64.dll`) to "The Windows system directory" or "The OpenSSL libraries (/bin) directory". If you choose the later, remember to add the path (e.g., `C:\OpenSSL-Win64\bin`) to the `PATH` environment variable.
 
-![OpenSSL Installation](https://github.com/sprinfall/webcc/blob/master/doc/screenshots/win_openssl_install.png)
+![OpenSSL Installation](screenshots/win_openssl_install.png)
 
 OpenSSL can also be statically linked (see `C:\OpenSSL-Win64\lib\VC\static`), but it's not recommended. Because the static libraries might not match the version of your VS.
 
@@ -55,15 +55,15 @@ Check _**Grouped**_ and _**Advanced**_ two check boxes.
 
 Click _**Configure**_ button, select the generator and platform (win32 or x64) from the popup dialog.
 
-![CMake generator](https://github.com/sprinfall/webcc/blob/master/doc/screenshots/win_cmake_generator.png)
+![CMake generator](screenshots/win_cmake_generator.png)
 
 In the center of CMake, you can see a lot of configure options which are grouped. Change them according to your need. E.g., set `WEBCC_ENABLE_SSL` to `1` to enable OpenSSL.
 
-![CMake config](https://github.com/sprinfall/webcc/blob/master/doc/screenshots/win_cmake_config.png)
+![CMake config](screenshots/win_cmake_config.png)
 
 Click _**Configure**_ button again. OpenSSL should be found.
 
-![CMake config OpenSSL](https://github.com/sprinfall/webcc/blob/master/doc/screenshots/win_cmake_config_openssl.png)
+![CMake config OpenSSL](screenshots/win_cmake_config_openssl.png)
 
 Click _**Configure**_ button again. If everything is OK, click _**Generate**_ button to generate the VS solution.
 

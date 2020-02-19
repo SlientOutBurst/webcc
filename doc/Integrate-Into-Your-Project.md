@@ -10,7 +10,7 @@ add_subdirectory(webcc)
 
 One of the difficulties is the dependency of third-party libraries, like `zlib` and `openssl`. It's not a big deal for Linux since they can be installed easily using the system package manager (`apt-get` for Ubuntu).
 
-For Windows, you should copy `third_pary\src\zlib`, which is the source code of zlib with the official `CMakeLists.txt`, to some place of your project. Download OpenSSL and install it. See [Build Instructions](https://github.com/sprinfall/webcc/doc/build_instructions.md) for more details.
+For Windows, you should copy `third_pary\src\zlib`, which is the source code of zlib with the official `CMakeLists.txt`, to some place of your project. Download OpenSSL and install it. See [Build Instructions](Build-Instructions.md) for more details.
 
 ## Integrate with Visual Studio
 

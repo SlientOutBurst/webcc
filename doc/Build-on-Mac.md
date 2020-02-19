@@ -92,11 +92,11 @@ Click _**Configure**_ button. Select "Unix Makefiles" (or "Xcode") as the genera
 
 In the center of CMake, you can see a lot of configure options which are grouped and might also be highlighted in RED.
 
-![CMake config](https://github.com/sprinfall/webcc/blob/master/doc/screenshots/mac_cmake_config.png)
+![CMake config](screenshots/mac_cmake_config.png)
 
 Now change the options according to your need. E.g.,
 
-![CMake config](https://github.com/sprinfall/webcc/blob/master/doc/screenshots/mac_cmake_config_2.png)
+![CMake config](screenshots/mac_cmake_config_2.png)
 
 Click _**Configure**_ button again, a message would say that OpenSSL couldn’t be found.
 
@@ -106,7 +106,7 @@ Don’t try to set the `OPENSSL_ROOT_DIR` system variable, it won’t work.
 
 As aforementioned, the OpenSSL was installed by Homebrew, and it’s located in `/usr/local/opt/openssl`. Let’s tell CMake where it is.
 
-![CMake config OpenSSL](https://github.com/sprinfall/webcc/blob/master/doc/screenshots/mac_cmake_config_openssl.png)
+![CMake config OpenSSL](screenshots/mac_cmake_config_openssl.png)
 
 Click _**Configure**_ button again. If everything is OK, click _**Generate**_ button.
 

@@ -35,7 +35,7 @@ Automation test based on real servers (mostly [httpbin.org](http://httpbin.org/)
 ### `WEBCC_ENABLE_LOG` and `WEBCC_LOG_LEVEL`
 
 These two options define how logging behaves.
-See [Logging](logging.md) for more details.
+See [Logging](Logging.md) for more details.
 
 ### `WEBCC_ENABLE_SSL`
 
@@ -47,6 +47,6 @@ For GZIP compression support (need Zlib).
 
 ## Platforms
 
-- [Build on Windows](build_on_windows.md)
-- [Build on Linux](build_on_linux.md)
-- [Build on Mac](build_on_mac.md)
+- [Build on Windows](Build-on-Windows.md)
+- [Build on Linux](Build-on-Linux.md)
+- [Build on Mac](Build-on-Mac.md)
