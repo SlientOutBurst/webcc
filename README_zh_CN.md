@@ -1,8 +1,8 @@
-# webcc
+# Webcc - C++ HTTP Library
 
 基于 [Boost Asio](https://www.boost.org/doc/libs/release/libs/asio/) 开发的轻量级 C++ HTTP 程序库，同时支持客户端与服务端。 
 
-[编译指南](https://github.com/sprinfall/webcc/wiki/Build-Instructions)，目前只有英文版。
+[编译指南](doc/Build-Instructions.md)，目前只有英文版。
 
 代码仓库: [https://github.com/sprinfall/webcc](https://github.com/sprinfall/webcc)。请认准链接，其他人 fork 的仓库，都不是最新的。
 
@@ -161,7 +161,7 @@ auto r = session.Send(webcc::RequestBuilder{}.
 
 注意，`Content-Length` 头部还是会设置为文件的真实大小，不同于 `Transfer-Encoding: chunked` 的分块数据形式。
 
-更多示例和用法，请参考 [examples](https://github.com/sprinfall/webcc/tree/master/examples/) 目录。 
+更多示例和用法，请参考 [examples](examples/) 目录。 
 
 ## 服务端 API
 
@@ -200,7 +200,7 @@ int main() {
 
 简单解释一下。一个服务器 (server) 对应多个视图 (view)，不同的视图对应不同的资源，视图通过 URL 路由，且 URL 可以为正则表达式。
 
-完整代码请见 [examples/hello_world_server](https://github.com/sprinfall/webcc/tree/master/examples/hello_world_server.cc)。 
+完整代码请见 [examples/hello_world_server](examples/hello_world_server.cc)。 
 
 下面看一个更复杂的例子。
 
@@ -330,4 +330,4 @@ int main(int argc, char* argv[]) {
 }
 ```
 
-完整实现请见 [examples/book_server](https://github.com/sprinfall/webcc/tree/master/examples/book_server)。
+完整实现请见 [examples/book_server](examples/book_server)。
