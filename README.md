@@ -1,6 +1,8 @@
-# webcc
+# Webcc - C++ HTTP Library
 
 [同学们，【中文版】在这里！](README_zh_CN.md)
+
+__NOTE: This branch (vs2013_compatible) uses limited C++ new features so it could be built by VS2013.__
 
 Lightweight C++ HTTP client and server library based on [Boost Asio](https://www.boost.org/doc/libs/release/libs/asio/).
 
