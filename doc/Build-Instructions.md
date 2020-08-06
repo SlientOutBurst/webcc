@@ -2,7 +2,7 @@
 
 ## Dependencies
 
-* [Boost](https://www.boost.org/) (asio, system, filesystem, date_time, regex)
+* [Boost 1.66+](https://www.boost.org/) (asio, system, filesystem, date_time, regex)
 * [OpenSSL](https://www.openssl.org/) (HTTPS)
 * [Zlib](https://www.zlib.net/) (GZIP compression)
 * [Googletest/gtest](https://github.com/google/googletest) (automation and unit tests)
@@ -12,6 +12,18 @@ Googletest is included in `third_party/src`. No need to install.
 
 OpenSSL and Zlib are **optional** since they could be disabled. See the build options below.
 
+The minimum version of CMake depends on Boost (see https://stackoverflow.com/a/42124857):
+
+- Boost 1.66 requires CMake 3.11 or newer.
+- Boost 1.67 requires CMake 3.12 or newer.
+- Boost 1.68, 1.69 require CMake 3.13 or newer.
+- Boost 1.70 requires CMake 3.14 or newer.
+- Boost 1.71 requires CMake 3.15.3 or newer.
+- Boost 1.72 requires CMake 3.16.2 or newer.
+- Boost 1.73 requires CMake 3.17.2 or newer.
+
+Take Ubuntu 14.04 as an exmaple, the CMake installed by `apt-get` is v3.5. So you have to download a newer CMake from its official website.
+ 
 ## Build Options
 
 The following CMake options determine how you build the projects. They are quite self-explanatory.
