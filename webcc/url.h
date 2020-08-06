@@ -1,10 +1,11 @@
 #ifndef WEBCC_URL_H_
 #define WEBCC_URL_H_
 
-#include <regex>
 #include <string>
 #include <utility>
 #include <vector>
+
+#include "boost/regex.hpp"
 
 #include "webcc/globals.h"
 
@@ -156,10 +157,9 @@ public:
   explicit UrlRegex(const std::string& url) : url_(url) {
   }
 
-  std::regex operator()() const {
-    std::regex::flag_type flags = std::regex::ECMAScript | std::regex::icase;
-
-    return std::regex(url_, flags);
+  boost::regex operator()() const {
+    boost::regex::flag_type flags = boost::regex::ECMAScript | boost::regex::icase;
+    return boost::regex(url_, flags);
   }
 
 private:

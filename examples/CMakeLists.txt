@@ -6,6 +6,7 @@ set(EXAMPLE_LIBS
     Boost::filesystem
     Boost::system
     Boost::date_time
+    Boost::regex
     "${CMAKE_THREAD_LIBS_INIT}")
 
 if(WEBCC_ENABLE_SSL)

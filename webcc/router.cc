@@ -14,7 +14,7 @@ bool Router::Route(const std::string& url, ViewPtr view,
 
   // TODO: More error check
 
-  routes_.push_back({ url, {}, view, methods });
+  routes_.push_back({ url, boost::regex(), view, methods });
 
   return true;
 }
@@ -29,7 +29,7 @@ bool Router::Route(const UrlRegex& regex_url, ViewPtr view,
 
     routes_.push_back({ "", regex_url(), view, methods });
 
-  } catch (const std::regex_error& e) {
+  } catch (const boost::regex_error& e) {
     LOG_ERRO("Not a valid regular expression: %s", e.what());
     return false;
   }
@@ -48,9 +48,9 @@ ViewPtr Router::FindView(const std::string& method, const std::string& url,
     }
 
     if (route.url.empty()) {
-      std::smatch match;
+      boost::smatch match;
 
-      if (std::regex_match(url, match, route.url_regex)) {
+      if (boost::regex_match(url, match, route.url_regex)) {
         // Any sub-matches?
         // Start from 1 because match[0] is the whole string itself.
         for (size_t i = 1; i < match.size(); ++i) {
@@ -81,9 +81,9 @@ bool Router::MatchView(const std::string& method, const std::string& url,
     }
 
     if (route.url.empty()) {
-      std::smatch match;
+      boost::smatch match;
 
-      if (std::regex_match(url, match, route.url_regex)) {
+      if (boost::regex_match(url, match, route.url_regex)) {
         *stream = route.view->Stream(method);
         return true;
       }

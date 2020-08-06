@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1.0)
+cmake_minimum_required(VERSION 3.11)
 
 if(POLICY CMP0074)
     # find_package() uses <PackageName>_ROOT variables.
@@ -7,6 +7,18 @@ if(POLICY CMP0074)
 endif()
 
 project(webcc)
+
+# Output directories
+set(BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR})
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${BUILD_DIR}/bin)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${BUILD_DIR}/bin)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${BUILD_DIR}/bin)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${BUILD_DIR}/bin/debug)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG ${BUILD_DIR}/bin/debug)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${BUILD_DIR}/bin/debug)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${BUILD_DIR}/bin/release)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE ${BUILD_DIR}/bin/release)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${BUILD_DIR}/bin/release)
 
 option(WEBCC_ENABLE_AUTOTEST "Build automation test?" OFF)
 option(WEBCC_ENABLE_UNITTEST "Build unit test?" OFF)
@@ -29,32 +41,10 @@ if(WEBCC_ENABLE_UNITTEST)
     enable_testing()
 endif()
 
-# Automatically detect _WIN32_WINNT for Asio.
-# See: https://stackoverflow.com/a/40217291
 if(WIN32)
-    macro(get_WIN32_WINNT version)
-        if(CMAKE_SYSTEM_VERSION)
-            set(ver ${CMAKE_SYSTEM_VERSION})
-            string(REGEX MATCH "^([0-9]+).([0-9])" ver ${ver})
-            string(REGEX MATCH "^([0-9]+)" verMajor ${ver})
-            # Check for Windows 10, b/c we'll need to convert to hex 'A'.
-            if("${verMajor}" MATCHES "10")
-                set(verMajor "A")
-                string(REGEX REPLACE "^([0-9]+)" ${verMajor} ver ${ver})
-            endif("${verMajor}" MATCHES "10")
-            # Remove all remaining '.' characters.
-            string(REPLACE "." "" ver ${ver})
-            # Prepend each digit with a zero.
-            string(REGEX REPLACE "([0-9A-Z])" "0\\1" ver ${ver})
-            set(${version} "0x${ver}")
-        endif(CMAKE_SYSTEM_VERSION)
-    endmacro(get_WIN32_WINNT)
-
-    get_WIN32_WINNT(ver)
-    # E.g., 0x0601 for Win7.
-    message(STATUS "_WIN32_WINNT=${ver}")
     # Asio needs this!
-    add_definitions(-D_WIN32_WINNT=${ver})
+    # 0x0601 means Win7. So our application targets Win7 and above.
+    add_definitions(-D_WIN32_WINNT=0x0601)
 endif()
 
 if(WIN32)
@@ -75,7 +65,9 @@ find_package(Threads REQUIRED)
 # Boost 1.66+ required.
 set(Boost_USE_STATIC_LIBS ON)
 set(Boost_USE_MULTITHREADED ON)
-find_package(Boost 1.66.0 REQUIRED COMPONENTS system filesystem date_time)
+# Use boost::regex instead of std::regex for supporting old compilers
+# like GCC 4.8.
+find_package(Boost 1.66.0 REQUIRED COMPONENTS system filesystem date_time regex)
 if(Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS})
     link_directories(${Boost_LIBRARY_DIRS})

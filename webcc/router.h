@@ -1,8 +1,9 @@
 #ifndef WEBCC_ROUTER_H_
 #define WEBCC_ROUTER_H_
 
-#include <regex>
 #include <string>
+
+#include "boost/regex.hpp"
 
 #include "webcc/globals.h"
 #include "webcc/view.h"
@@ -37,7 +38,7 @@ public:
 private:
   struct RouteInfo {
     std::string url;
-    std::regex url_regex;
+    boost::regex url_regex;
     ViewPtr view;
     Strings methods;
   };
