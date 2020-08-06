@@ -1,7 +1,5 @@
 #include "webcc/common.h"
 
-#include <codecvt>
-
 #include "boost/algorithm/string.hpp"
 
 #include "webcc/logger.h"
