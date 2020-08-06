@@ -30,12 +30,13 @@ You can change install prefix with `--prefix` (default is `/usr/local`, need `su
 Build and install:
 
 ```
-sudo ./b2 --with-system --with-filesystem --with-date_time variant=debug link=static threading=multi -j4 install
+sudo ./b2 --with-system --with-filesystem --with-date_time --with-regex variant=debug link=static threading=multi -j4 install
 ```
 
 Notes:
 
 - Only build the specified libraries. `Asio` itself is header only so doesn’t have to be built.
+- `regex` is included because old compilers like GCC 4.8 has many issues in implementing `std::regex`. See the discussion [here](https://stackoverflow.com/a/12665408).
 - Only build static libraries (`link=static`)
 - The number after `-j` depends on the number of CPU cores you have.
 - If you want to build release version libraries, set `variant=release`. The `debug` and `release` libraries have exactly the same name, so you cannot build them both at the same time.
@@ -52,8 +53,7 @@ The libraries are installed to `/usr/local/lib`. E.g.,
 ```
 $ ls -l /usr/local/lib/libboost*
 -rw-r--r--  1 adam  admin   540288 Apr 21 11:01 /usr/local/lib/libboost_date_time.a
--rw-r--r--  1 adam  admin  1717736 Apr 21 11:01 /usr/local/lib/libboost_filesystem.a
--rw-r--r--  1 root  admin     2976 Apr 21 11:01 /usr/local/lib/libboost_system.a
+...
 ```
 
 The headers are installed to `/usr/local/include/boost`.
