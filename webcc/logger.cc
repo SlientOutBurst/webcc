@@ -6,7 +6,6 @@
 #include <chrono>
 #include <cstdarg>
 #include <ctime>
-#include <iomanip>  // for put_time
 #include <mutex>
 #include <sstream>
 #include <string>
@@ -192,7 +191,11 @@ static std::string GetTimestamp() {
   std::time_t t = system_clock::to_time_t(now);
 
   std::stringstream ss;
-  ss << std::put_time(std::localtime(&t), "%Y-%m-%d %H:%M:%S");
+
+  // NOTE: Avoid using std::put_time() which doesn't compile on GCC 4.8.
+  char buf[20];
+  std::strftime(buf, 20, "%Y-%m-%d %H:%M:%S", std::localtime(&t));
+  ss << buf;
 
   milliseconds milli_seconds =
       std::chrono::duration_cast<milliseconds>(now.time_since_epoch());

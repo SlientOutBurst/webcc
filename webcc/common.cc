@@ -201,7 +201,7 @@ FormPartPtr FormPart::NewFile(const std::string& name, const Path& path,
 
   // Determine file name from file path.
   // TODO: encoding
-  form_part->file_name_ = path.filename().string(std::codecvt_utf8<wchar_t>());
+  form_part->file_name_ = path.filename().string();
 
   // Determine media type from file extension.
   // TODO: Default to "application/text"?
