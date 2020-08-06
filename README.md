@@ -2,7 +2,7 @@
 
 [__中文版__](README_zh_CN.md)
 
-__NOTE: This branch (vs2013_compatible) uses limited C++ new features so it could be built by VS2013.__
+__NOTE: This branch (legacy) uses limited C++ new features so it could be built by old C++ compilers (e.g., VS2013, GCC 4.8).__
 
 Lightweight C++ HTTP __client and server__ library based on [Asio](https://www.boost.org/doc/libs/release/libs/asio/) for __embedding__ purpose.
 
