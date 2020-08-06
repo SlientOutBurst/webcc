@@ -338,10 +338,20 @@ void UrlQuery::Add(const std::string& key, const std::string& value) {
 }
 
 void UrlQuery::Remove(const std::string& key) {
+#if 0
+  // NOTE: This doesn't compile on GCC 4.8 since erase() accepts a non-const iterator.
   auto it = Find(key);
   if (it != parameters_.end()) {
     parameters_.erase(it);
   }
+#else
+  for (auto it = parameters_.begin(); it != parameters_.end(); ++it) {
+    if (it->first == key) {
+      parameters_.erase(it);
+      break;
+    }
+  }
+#endif
 }
 
 std::string UrlQuery::ToString() const {

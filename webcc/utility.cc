@@ -1,7 +1,6 @@
 #include "webcc/utility.h"
 
 #include <ctime>
-#include <iomanip>  // for put_time
 #include <sstream>
 
 #include "boost/algorithm/string.hpp"
@@ -28,11 +27,12 @@ const std::string& UserAgent() {
   return s_user_agent;
 }
 
+// TODO: locale independent!
 std::string GetTimestamp() {
   std::time_t t = std::time(nullptr);
-  std::stringstream ss;
-  ss << std::put_time(std::gmtime(&t), "%a, %d %b %Y %H:%M:%S") << " GMT";
-  return ss.str();
+  char buf[32];
+  std::strftime(buf, 32, "%a, %d %b %Y %H:%M:%S", std::gmtime(&t));
+  return std::string(buf) + " GMT";
 }
 
 bool SplitKV(const std::string& str, char delimiter, std::string* key,
