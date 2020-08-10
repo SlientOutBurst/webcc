@@ -46,6 +46,9 @@ public:
     charset_ = charset;
   }
 
+  // Set content types to accept.
+  void Accept(const std::string& content_types);
+
   // Set authorization.
   void Auth(const std::string& type, const std::string& credentials);
 

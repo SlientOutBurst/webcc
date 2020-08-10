@@ -116,6 +116,12 @@ public:
     return *this;
   }
 
+  // Set (comma separated) content types to accept.
+  // E.g., "application/json", "text/html, application/xhtml+xml".
+  RequestBuilder& Accept(const std::string& content_types) {
+    return Header(headers::kAccept, content_types);
+  }
+
   RequestBuilder& Body(const std::string& data) {
     body_.reset(new StringBody{ data, false });
     return *this;

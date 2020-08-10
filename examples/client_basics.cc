@@ -9,13 +9,14 @@ int main() {
 
   webcc::ClientSession session;
 
+  session.Accept("application/json");
+
   webcc::ResponsePtr r;
 
   try {
     r = session.Send(webcc::RequestBuilder{}.
                      Get("http://httpbin.org/get").
-                     Query("name", "Adam Gu", /*encode*/true).
-                     Header("Accept", "application/json").Date()
+                     Query("name", "Adam Gu", /*encode*/true).Date()
                      ());
 
     assert(r->status() == webcc::Status::kOK);
