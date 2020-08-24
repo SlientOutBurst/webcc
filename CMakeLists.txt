@@ -69,8 +69,8 @@ set(Boost_USE_MULTITHREADED ON)
 # like GCC 4.8.
 find_package(Boost 1.66.0 REQUIRED COMPONENTS system filesystem date_time regex)
 if(Boost_FOUND)
+    message(STATUS "Boost version: ${Boost_VERSION}")
     include_directories(${Boost_INCLUDE_DIRS})
-    link_directories(${Boost_LIBRARY_DIRS})
 endif()
 
 if(WEBCC_ENABLE_SSL)

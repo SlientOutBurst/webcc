@@ -6,14 +6,37 @@ __NOTE: This branch (legacy) uses limited C++ new features so it could be built 
 
 Lightweight C++ HTTP __client and server__ library based on [Asio](https://www.boost.org/doc/libs/release/libs/asio/) for __embedding__ purpose.
 
-Please turn to [doc](doc/) for more tutorials and guides. E.g., [Build Instructions](doc/Build-Instructions.md).
+=> [Build Instructions](doc/Build-Instructions.md)
 
 Git repo: https://github.com/sprinfall/webcc. Please check this one instead of the forked for the latest features.
 
-**Features**
+**Contents**
+* [Overview](#overview)
+* [Client API](#client-api)
+    * [A Complete Example](#a-complete-example)
+    * [Request Builder](#request-builder)
+    * [HTTPS](#https)
+    * [Invoking GitHub REST API](#invoking-github-rest-api)
+    * [Authorization](#authorization)
+    * [Keep-Alive (Persistent Connection)](#keep-alive)
+    * [POST Request](#post-request)
+    * [Downloading Files](#downloading-files)
+    * [Uploading Files](#uploading-files)
+* [Server API](#server-api)
+    * [A Minimal Server](#a-minimal-server)
+    * [URL Route](#url-route)
+    * [Running A Server](#running-a-server)
+    * [Response Builder](#response-builder)
+    * [REST Book Server](#rest-book-server)
+* [IPv6 Support](#ipv6-support)
+    * [IPv6 Server](#ipv6-server)
+    * [IPv6 Client](#ipv6-client)
+
+## Overview
 
 - Cross-platform: Windows, Linux and MacOS
 - Easy-to-use client API inspired by Python [requests](https://2.python-requests.org//en/master/)
+- IPv6 support
 - SSL/HTTPS support with OpenSSL (optional)
 - GZip compression support with Zlib (optional)
 - Persistent (Keep-Alive) connections
@@ -24,9 +47,10 @@ Git repo: https://github.com/sprinfall/webcc. Please check this one instead of t
 - Timeout control
 - Source code follows [Google C++ Style](https://google.github.io/styleguide/cppguide.html)
 - Automation tests and unit tests included
-- No memory leak detected by [VLD](https://kinddragon.github.io/vld/)
 
 ## Client API
+
+### A Complete Example
 
 Let's start from a complete client example:
 
@@ -62,6 +86,8 @@ int main() {
 }
 ```
 
+### Request Builder
+
 As you can see, a helper class named `RequestBuilder` is used to chain the parameters and finally build a request object. Please pay attention to the `()` operator.
 
 URL query parameters can be easily added through `Query()` method:
@@ -82,6 +108,8 @@ session.Send(webcc::RequestBuilder{}.
              ());
 ```
 
+### HTTPS
+
 Accessing HTTPS has no difference from HTTP:
 
 ```cpp
@@ -89,6 +117,8 @@ session.Send(webcc::RequestBuilder{}.Get("https://httpbin.org/get")());
 ```
 
 *NOTE: The HTTPS/SSL support requires the build option `WEBCC_ENABLE_SSL` to be enabled.*
+
+### Invoking GitHub REST API
 
 Listing GitHub public events is not a big deal:
 
@@ -101,6 +131,8 @@ auto r = session.Send(webcc::RequestBuilder{}.
 You can then parse `r->data()` to JSON object with your favorite JSON library. My choice for the examples is [jsoncpp](https://github.com/open-source-parsers/jsoncpp). But Webcc itself doesn't understand JSON nor require one. It's up to you to choose the most appropriate JSON library.
 
 `RequestBuilder` provides a lot of functions for you to customize the request. Let's see more examples.
+
+### Authorization
 
 In order to list the followers of an authorized GitHub user, you need either **Basic Authorization**:
 
@@ -120,6 +152,8 @@ session.Send(webcc::RequestBuilder{}.
              ());
 ```
 
+### Keep-Alive
+
 Though **Keep-Alive** (i.e., persistent connection) is a good feature and enabled by default, you can turn it off:
 
 ```cpp
@@ -131,6 +165,8 @@ auto r = session.Send(webcc::RequestBuilder{}.
 
 The API for other HTTP requests is no different from GET.
 
+### POST Request
+
 POST request needs a body which is normally a JSON string for REST API. Let's post a small UTF-8 encoded JSON string:
 
 ```cpp
@@ -140,16 +176,20 @@ session.Send(webcc::RequestBuilder{}.
              ());
 ```
 
+### Downloading Files
+
 Webcc has the ability to stream large response data to a file. This is especially useful when downloading files.
 
 ```cpp
 auto r = session.Send(webcc::RequestBuilder{}.
                       Get("http://httpbin.org/image/jpeg")
-                      (), true);  // stream = true
+                      (), /*stream=*/true);
 
 // Move the streamed file to your destination.
 r->file_body()->Move("./wolf.jpeg");
 ```
+
+### Uploading Files
 
 Streaming is also available for uploading:
 
@@ -168,9 +208,17 @@ Please check the [examples](examples/) for more information.
 
 ## Server API
 
-### Hello, World!
+### A Minimal Server
+
+The following example is a minimal yet complete HTTP server.
+
+Start it, open a browser with `localhost:8080`, you will see `Hello, World!` as response.
 
 ```cpp
+#include "webcc/logger.h"
+#include "webcc/response_builder.h"
+#include "webcc/server.h"
+
 class HelloView : public webcc::View {
 public:
   webcc::ResponsePtr Handle(webcc::RequestPtr request) override {
@@ -184,7 +232,7 @@ public:
 
 int main() {
   try {
-    webcc::Server server(8080);
+    webcc::Server server(boost::asio::ip::tcp::v4(), 8080);
 
     server.Route("/", std::make_shared<HelloView>());
 
@@ -198,7 +246,52 @@ int main() {
 }
 ```
 
-### Book Server
+### URL Route
+
+The `Route()` method routes different URLs to different `views`.
+
+You can route different URLs to the same view:
+
+```cpp
+server.Route("/", std::make_shared<HelloView>());
+server.Route("/hello", std::make_shared<HelloView>());
+```
+
+Or even the same view object:
+
+```cpp
+auto view = std::make_shared<HelloView>();
+server.Route("/", view);
+server.Route("/hello", view);
+```
+
+But normally a view only handles a specific URL (see the Book Server example). 
+
+The URL could be regular expressions. The Book Server example uses a regex URL to match against book IDs.
+
+Finally, it's always suggested to explicitly specify the HTTP methods allowed for a route:
+
+```cpp
+server.Route("/", std::make_shared<HelloView>(), { "GET" });
+```
+
+### Running A Server
+
+The last thing about server is `Run()`:
+
+```cpp
+void Run(std::size_t workers = 1, std::size_t loops = 1);
+```
+
+Workers are threads which will be waken to process the HTTP requests once they arrive. Theoretically, the more `workers` you have, the more concurrency you gain. In practice, you have to take the number of CPU cores into account and allocate a reasonable number for it.
+
+The `loops` means the number of threads running the IO Context of Asio. Normally, one thread is good enough, but it could be more than that.
+
+### Response Builder
+
+The server API provides a helper class `ResponseBuilder` for the views to chain the parameters and finally build a response object. This is exactly the same strategy as `RequestBuilder`.
+
+### REST Book Server
 
 Suppose you want to create a book server and provide the following operations with RESTful API:
 
@@ -296,7 +389,7 @@ int main(int argc, char* argv[]) {
   // ...
 
   try {
-    webcc::Server server(8080);
+    webcc::Server server(boost::asio::ip::tcp::v4(), 8080);
 
     server.Route("/books",
                  std::make_shared<BookListView>(),
@@ -317,3 +410,23 @@ int main(int argc, char* argv[]) {
 ```
 
 Please see [examples/book_server](examples/book_server) for more details.
+
+## IPv6 Support
+
+### IPv6 Server
+
+Only need to change the protocol to `boost::asio::ip::tcp::v6()`:
+
+```cpp
+webcc::Server server(boost::asio::ip::tcp::v6(), 8080);
+```
+
+### IPv6 Client
+
+Only need to specify an IPv6 address:
+
+```cpp
+auto r = session.Send(webcc::RequestBuilder{}.
+                      Get("http://[::1]:8080/books").
+                      ());
+```

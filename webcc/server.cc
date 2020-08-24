@@ -18,9 +18,15 @@ using tcp = boost::asio::ip::tcp;
 
 namespace webcc {
 
-Server::Server(std::uint16_t port, const Path& doc_root)
-    : port_(port), doc_root_(doc_root), file_chunk_size_(1024), running_(false),
-      acceptor_(io_context_), signals_(io_context_) {
+Server::Server(boost::asio::ip::tcp protocol, std::uint16_t port,
+               const Path& doc_root)
+    : protocol_(protocol),
+      port_(port),
+      doc_root_(doc_root),
+      file_chunk_size_(1024),
+      running_(false),
+      acceptor_(io_context_),
+      signals_(io_context_) {
   AddSignals();
 }
 
@@ -114,7 +120,7 @@ void Server::AsyncWaitSignals() {
 bool Server::Listen(std::uint16_t port) {
   boost::system::error_code ec;
 
-  tcp::endpoint endpoint(tcp::v4(), port);
+  tcp::endpoint endpoint(protocol_, port);
 
   // Open the acceptor.
   acceptor_.open(endpoint.protocol(), ec);
